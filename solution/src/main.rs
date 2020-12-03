@@ -38,20 +38,41 @@ fn main() {
   // println!("height: {}, width: {}", max_x, max_y);
   // println!("{:?}", map);
 
-  loop {
-    pos.0 += 3;
-    pos.1 += 1;
-    if pos.0 >= max_x {
-      pos.0 = pos.0 - max_x;
+  /*
+  Right 1, down 1.
+  Right 3, down 1. (This is the slope you already checked.)
+  Right 5, down 1.
+  Right 7, down 1.
+  Right 1, down 2.
+  */
+
+  let increments: Vec<(usize, usize)> = vec![(1,1),(3,1),(5,1),(7,1),(1,2)];
+  let mut answer: u64 = 1;
+
+  #[allow(non_snake_case)]
+  for (iX, iY) in increments {
+    loop {
+      pos.0 += iX;
+      pos.1 += iY;
+      if pos.0 >= max_x {
+        pos.0 = pos.0 - max_x;
+      }
+      if pos.1 >= max_y {
+        pos.0 = 1;
+        pos.1 = 1;
+        break;
+      }
+      if map[pos.1][pos.0] == '#' {
+        trees += 1;
+        // println!("x: {}, y: {}, trees: {}", pos.0, pos.1, trees);
+      }
     }
-    if pos.1 >= max_y {
-      break;
-    }
-    // println!("x: {}, y: {}", pos.0, pos.1);
-    if map[pos.1][pos.0] == '#' {
-      trees += 1;
-    }
+    // println!("Trees: {}", trees);
+    answer *= trees;
+    trees = 0;
+    pos.0 = 0;
+    pos.1 = 0;
   }
 
-  println!("Answer: {}", trees);
+  println!("Answer: {}", answer);
 }
