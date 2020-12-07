@@ -1,8 +1,7 @@
-use std::collections::BinaryHeap;
 fn main() {
   let input = include_str!("../input.in");
   
-  let mut id_heap: BinaryHeap<u16> = BinaryHeap::new();
+  let mut matrix = [[false; 8]; 300];
 
   for line in input.lines() {
     let mut r_start: u8 = 0;
@@ -18,10 +17,16 @@ fn main() {
         _ => {}
       }
     }
-    // println!("{} = {} * 8 + {}", (r_start as u16) * 8 + (c_start as u16), r_start, c_start);
-    id_heap.push((r_start as u16) * 8 + (c_start as u16));
+    matrix[(r_start-1) as usize][c_start as usize] = true;
   }
 
-  println!("Answer: {}", id_heap.peek().unwrap());
+  for (i, x) in matrix.iter().skip(1).enumerate() {
+    for (j, y) in x.iter().enumerate() {
+      if !y {
+        println!("Answer: {}", (i+2) * 8 + j);
+        return
+      }
+    }
+  }
 
 }
